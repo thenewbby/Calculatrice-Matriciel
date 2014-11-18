@@ -16,6 +16,105 @@ namespace calculatrice
             this.Lines = c;
             this.Columns = c;
         }
+
+        public static SquareMatrix operator +(SquareMatrix a, SquareMatrix b)
+        {
+            return a.DoAdd(b);
+        }
+
+        protected SquareMatrix DoAdd(SquareMatrix b)
+        {
+            if (this.Lines == b.Lines && this.Columns == b.Columns)
+            {
+                SquareMatrix c = new SquareMatrix(this.Columns);
+                for (int i = 0; i < this.Lines; i++)
+                {
+                    for (int j = 0; j < this.Columns; j++)
+                    {
+                        c.Elements[i, j] = this.Elements[i, j] + b.Elements[i, j];
+                    }
+                }
+                return c;
+            }
+            else
+            {
+                Console.WriteLine("operation impossible");
+                return null;
+            }
+        }
+
+        public static SquareMatrix operator -(SquareMatrix a, SquareMatrix b)
+        {
+            return a.DoSub(b);
+        }
+
+        protected SquareMatrix DoSub(SquareMatrix b)
+        {
+            if (this.Lines == b.Lines && this.Columns == b.Columns)
+            {
+                SquareMatrix c = new SquareMatrix(this.Columns);
+                for (int i = 0; i < this.Lines; i++)
+                {
+                    for (int j = 0; j < this.Columns; j++)
+                    {
+                        c.Elements[i, j] = this.Elements[i, j] - b.Elements[i, j];
+                    }
+                }
+                return c;
+            }
+            else
+            {
+                Console.WriteLine("operation impossible");
+                return null;
+            }
+        }
+
+        public static SquareMatrix operator *(SquareMatrix a, SquareMatrix b)
+        {
+            return a.DoMul(b);
+        }
+
+        protected SquareMatrix DoMul(SquareMatrix b)
+        {
+            if (this.Columns == b.Lines)
+            {
+                SquareMatrix c = new SquareMatrix(b.Columns);
+                for (int i = 0; i < this.Lines; i++)
+                {
+                    for (int j = 0; j < b.Columns; j++)
+                    {
+                        for (int z = 0; z < b.Columns; z++)
+                        {
+                            c.Elements[i, j] += this.Elements[i, z] * b.Elements[z, j];
+                        }
+                    }
+                }
+                return c;
+            }
+            else
+            {
+                Console.WriteLine("operation impossible");
+                return null;
+            }
+        }
+
+        public static SquareMatrix operator *(int a, SquareMatrix b)
+        {
+            return b.DoScal(a);
+        }
+
+        protected new SquareMatrix DoScal(int a)
+        {
+            SquareMatrix c = new SquareMatrix(this.Lines);
+            for (int i = 0; i < this.Lines; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    c.Elements[i, j] = a * this.Elements[i, j];
+                }
+            }
+            return c;
+        }
         /*
         protected int SubMatrix(SquareMatrix a, int x)
         {
@@ -127,7 +226,23 @@ namespace calculatrice
         }*/
 
 
-        // une autre methode : http://www.math.sciences.univ-nantes.fr/~morame/SYM03/DiagHT/node17.html
+        /*public int Det ()
+        {
+            int M;
+            SquareMatrix c = this; 
+            for (int j = 0 ; j < this.Columns; j++)
+            {
+                M = j;
+                for (int i = j; i < this.Lines -1 ; i++ )
+                {
+                    //if ( this.Elements[ i , j ] > this  )
+                    //{
+
+                    //}
+                }
+            }
+        }
+         */
     }            
 }
 

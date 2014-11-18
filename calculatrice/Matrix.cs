@@ -9,21 +9,26 @@ namespace calculatrice
     class Matrix
     {
         public int Lines { get; set; }
-        public int Columns { get; set; } 
+        public int Columns { get; set; }
         public int[,] Elements { get; set; }
-        
 
-        
-        public static Matrix operator+ (Matrix a, Matrix b)
+
+
+        public static Matrix operator +(Matrix a, Matrix b)
         {
-            if (a.Lines == b.Lines && a.Columns == b.Columns)
+            return a.DoAdd(b);
+        }
+
+        protected Matrix DoAdd(Matrix b)
+        {
+            if (this.Lines == b.Lines && this.Columns == b.Columns)
             {
-                Matrix c = new Matrix(a.Columns, a.Lines);
-                for (int i = 0; i < a.Lines ; i++)
+                Matrix c = new Matrix(this.Columns, this.Lines);
+                for (int i = 0; i < this.Lines; i++)
                 {
-                    for (int j = 0; j < a.Columns; j++)
+                    for (int j = 0; j < this.Columns; j++)
                     {
-                        c.Elements[i, j] = a.Elements[i, j] + b.Elements[i, j];
+                        c.Elements[i, j] = this.Elements[i, j] + b.Elements[i, j];
                     }
                 }
                 return c;
@@ -35,81 +40,80 @@ namespace calculatrice
             }
         }
 
-        
-          public static Matrix operator- (Matrix a, Matrix b)
-          {
-              if (a.Lines == b.Lines && a.Columns == b.Columns)
-              {
-                  Matrix c = new Matrix(a.Columns, a.Lines);
-                  for (int i = 0; i < a.Lines ; i++)
-                  {
-                      for (int j = 0; j < a.Columns; j++)
-                      {
-                          c.Elements[i, j] = a.Elements[i, j] - b.Elements[i, j];
-                      }
-                  }
-                  return c;
-              }
-              else
-              {
-                  Console.WriteLine("operation impossible");
-                  return null;
-              }
-          }
 
-          public override string ToString() 
-          {
-              String value = "";
+        public static Matrix operator -(Matrix a, Matrix b)
+        {
+            return a.DoSub(b);
+        }
 
-              for (int j = 0; j < this.Lines; j++)
-              {
-                  for (int i = 0; i < this.Columns; i++)
-                  {
-                     value += Elements[j, i] + "\t";
-                  }
+        protected Matrix DoSub (Matrix b)
+        {
+            if (this.Lines == b.Lines && this.Columns == b.Columns)
+            {
+                Matrix c = new Matrix(this.Columns, this.Lines);
+                for (int i = 0; i < this.Lines; i++)
+                {
+                    for (int j = 0; j < this.Columns; j++)
+                    {
+                        c.Elements[i, j] = this.Elements[i, j] - b.Elements[i, j];
+                    }
+                }
+                return c;
+            }
+            else
+            {
+                Console.WriteLine("operation impossible");
+                return null;
+            }
+        }
 
-                  value += "\n";
-                  
-              }
-              return value;
-          }
+        public static Matrix operator *(Matrix a, Matrix b)
+        {
+            return a.DoMul(b);
+        }
 
-          public static Matrix operator* (Matrix a, Matrix b)
-          {
-              if (a.Columns == b.Lines)
-              {
-                  Matrix c = new Matrix(b.Columns, a.Lines);
-                  for (int i = 0; i < a.Lines; i++)
-                  {
-                      for(int j = 0; j < b.Columns; j++)
-                      {
-                          for (int z = 0; z < b.Columns; z++)
-                          {
-                              c.Elements[i, j] += a.Elements[i, z] * b.Elements[z, j];
-                          }
-                      }
-                  }
-                  return c;
-              }
-              else
-              {
-                  Console.WriteLine("operation impossible");
-                  return null;
-              }
-          }
+        protected Matrix DoMul (Matrix b)
+        {
+            if (this.Columns == b.Lines)
+            {
+                Matrix c = new Matrix(b.Columns, this.Lines);
+                for (int i = 0; i < this.Lines; i++)
+                {
+                    for (int j = 0; j < b.Columns; j++)
+                    {
+                        for (int z = 0; z < b.Columns; z++)
+                        {
+                            c.Elements[i, j] += this.Elements[i, z] * b.Elements[z, j];
+                        }
+                    }
+                }
+                return c;
+            }
+            else
+            {
+                Console.WriteLine("operation impossible");
+                return null;
+            }
+        }
 
-          public static Matrix operator *(int a, Matrix b)
-          {
-              Matrix c = new Matrix(b.Lines, b.Columns);
-              for (int i = 0; i < b.Lines; i++)
-              {
-                  for (int j = 0; j < b.Columns; j++)
-                  {
-                      c.Elements[i, j] = a * b.Elements[i, j];
-                  }
-              }
-              return c;
-          }
+
+        public static Matrix operator *(int a, Matrix b)
+        {
+            return b.DoScal(a);
+        }
+
+        protected Matrix DoScal (int a)
+        {
+            Matrix c = new Matrix(this.Lines, this.Columns);
+            for (int i = 0; i < this.Lines; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    c.Elements[i, j] = a * this.Elements[i, j];
+                }
+            }
+            return c;
+        }
 
 
         public Matrix(int c, int l)
@@ -119,20 +123,20 @@ namespace calculatrice
             this.Columns = c;
         }
 
-        public void Input ()
-            {
-             bool num = false;
-             for (int i = 0; i < this.Lines; i++ )
+        public void Input()
+        {
+            bool num = false;
+            for (int i = 0; i < this.Lines; i++)
             {
                 for (int j = 0; j < this.Columns; j++)
                 {
-                    while ( !num )
+                    while (!num)
                     {
                         Console.WriteLine("taper le coef ne la case " + i + ";" + j);
                         if (int.TryParse(Console.ReadLine(), out Elements[i, j]))
                         {
-                           num = true;
-                           Console.WriteLine("ok");
+                            num = true;
+                            Console.WriteLine("ok");
                         }
                         else
                         {
@@ -143,7 +147,23 @@ namespace calculatrice
 
                 }
             }
-       }
+        }
 
+        public override string ToString()
+        {
+            String value = "";
+
+            for (int j = 0; j < this.Lines; j++)
+            {
+                for (int i = 0; i < this.Columns; i++)
+                {
+                    value += Elements[j, i] + "\t";
+                }
+
+                value += "\n";
+
+            }
+            return value;
+        }
     }
 }
