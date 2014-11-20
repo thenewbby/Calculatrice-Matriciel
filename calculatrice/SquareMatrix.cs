@@ -12,111 +12,69 @@ namespace calculatrice
         public SquareMatrix(int c) : base(c,c)
         {
 
-            this.Elements = new int[c, c];
+            this.Elements = new float[c, c];
             this.Lines = c;
             this.Columns = c;
         }
 
-        public static SquareMatrix operator +(SquareMatrix a, SquareMatrix b)
+        public new SquareMatrix Trans()
         {
-            return a.DoAdd(b);
-        }
-
-        protected SquareMatrix DoAdd(SquareMatrix b)
-        {
-            if (this.Lines == b.Lines && this.Columns == b.Columns)
-            {
-                SquareMatrix c = new SquareMatrix(this.Columns);
-                for (int i = 0; i < this.Lines; i++)
-                {
-                    for (int j = 0; j < this.Columns; j++)
-                    {
-                        c.Elements[i, j] = this.Elements[i, j] + b.Elements[i, j];
-                    }
-                }
-                return c;
-            }
-            else
-            {
-                Console.WriteLine("operation impossible");
-                return null;
-            }
-        }
-
-        public static SquareMatrix operator -(SquareMatrix a, SquareMatrix b)
-        {
-            return a.DoSub(b);
-        }
-
-        protected SquareMatrix DoSub(SquareMatrix b)
-        {
-            if (this.Lines == b.Lines && this.Columns == b.Columns)
-            {
-                SquareMatrix c = new SquareMatrix(this.Columns);
-                for (int i = 0; i < this.Lines; i++)
-                {
-                    for (int j = 0; j < this.Columns; j++)
-                    {
-                        c.Elements[i, j] = this.Elements[i, j] - b.Elements[i, j];
-                    }
-                }
-                return c;
-            }
-            else
-            {
-                Console.WriteLine("operation impossible");
-                return null;
-            }
-        }
-
-        public static SquareMatrix operator *(SquareMatrix a, SquareMatrix b)
-        {
-            return a.DoMul(b);
-        }
-
-        protected SquareMatrix DoMul(SquareMatrix b)
-        {
-            if (this.Columns == b.Lines)
-            {
-                SquareMatrix c = new SquareMatrix(b.Columns);
-                for (int i = 0; i < this.Lines; i++)
-                {
-                    for (int j = 0; j < b.Columns; j++)
-                    {
-                        for (int z = 0; z < b.Columns; z++)
-                        {
-                            c.Elements[i, j] += this.Elements[i, z] * b.Elements[z, j];
-                        }
-                    }
-                }
-                return c;
-            }
-            else
-            {
-                Console.WriteLine("operation impossible");
-                return null;
-            }
-        }
-
-        public static SquareMatrix operator *(int a, SquareMatrix b)
-        {
-            return b.DoScal(a);
-        }
-
-        protected new SquareMatrix DoScal(int a)
-        {
-            SquareMatrix c = new SquareMatrix(this.Lines);
+            SquareMatrix T = new SquareMatrix(this.Lines);
             for (int i = 0; i < this.Lines; i++)
             {
                 for (int j = 0; j < this.Columns; j++)
                 {
-                    c.Elements[i, j] = a * this.Elements[i, j];
+                    T.Elements[i, j] = this.Elements[j, i];
                 }
             }
-            return c;
+            return T;
         }
-        /*
-        protected int SubMatrix(SquareMatrix a, int x)
+
+
+        public static SquareMatrix operator +(SquareMatrix a, SquareMatrix b)
+        {
+            Matrix aM = (Matrix)a;
+            Matrix bM = (Matrix)b;
+            Matrix c = a + b;
+            SquareMatrix r = new SquareMatrix(a.Lines);
+            r.Elements = c.Elements;
+            return r;
+        }
+
+
+
+        public static SquareMatrix operator -(SquareMatrix a, SquareMatrix b)
+        {
+            Matrix aM = (Matrix)a;
+            Matrix bM = (Matrix)b;
+            Matrix c = a - b;
+            SquareMatrix r = new SquareMatrix(a.Lines);
+            r.Elements = c.Elements;
+            return r;
+        }
+
+
+        public static SquareMatrix operator *(SquareMatrix a, SquareMatrix b)
+        {
+            Matrix aM = (Matrix)a;
+            Matrix bM = (Matrix)b;
+            Matrix c = a * b;
+            SquareMatrix r = new SquareMatrix(a.Lines);
+            r.Elements = c.Elements;
+            return r;
+        }
+
+
+        public static SquareMatrix operator *(int a, SquareMatrix b)
+        {
+            Matrix bM = (Matrix)b;
+            Matrix c = a * b;
+            SquareMatrix r = new SquareMatrix(b.Lines);
+            r.Elements = c.Elements;
+            return r;
+        }
+
+        /*protected int SubMatrix(SquareMatrix a, int x)
         {
             if (a.Columns == 2)
             {
@@ -180,8 +138,6 @@ namespace calculatrice
         */
 
 
-
-
         /*public int Det ()
         {
             if (this.Lines == 1)
@@ -225,24 +181,56 @@ namespace calculatrice
             }
         }*/
 
-
-        /*public int Det ()
+        public int Det()
         {
-            int M;
-            SquareMatrix c = this; 
-            for (int j = 0 ; j < this.Columns; j++)
-            {
-                M = j;
-                for (int i = j; i < this.Lines -1 ; i++ )
-                {
-                    //if ( this.Elements[ i , j ] > this  )
-                    //{
+            int Max;
+            float k, det = 1;
+            SquareMatrix c = this;
+            float[,] Array = new float[this.Columns, 1];
 
-                    //}
+            for (int j = 0; j < this.Columns; j++)
+            {
+                Max = j;
+                for (int i = j; i < this.Lines - 1; i++)
+                {
+                    if (this.Elements[j, i] > this.Elements[Max, i])
+                    {
+                        Max = j;
+                    }
                 }
+                for (int x = 0; x < this.Columns; x++)
+                {
+                    Array [x,0] = c.Elements[x,j];
+                }
+                for (int x = 0; x < this.Columns; x++)
+                {
+                    c.Elements[x, j] = c.Elements[x, Max];
+                }
+                for (int x = 0; x < this.Columns; x++)
+                {
+                    c.Elements[x, j] = Array[x, 0];
+                }
+                
+                for (int i = j+1; i <c.Lines; i++ )
+                {
+                    k = c.Elements[j,i] / c.Elements[j,j];
+                    for (int x = 0; x < c.Columns; x++)
+                    {
+                        c.Elements[x, i] -= k * c.Elements[x, j];
+                    }
+                    
+                }
+
             }
+            Console.Write(c);
+
+            for (int x = 0; x < c.Lines; x++ )
+            {
+                det *= c.Elements[x, x];
+            }
+            Console.WriteLine("\n" + det);
+                return 0;
         }
-         */
     }            
 }
 

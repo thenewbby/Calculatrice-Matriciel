@@ -20,20 +20,17 @@ namespace calculatrice
             }
             */
             
-            SquareMatrix A = new SquareMatrix(2);
+            SquareMatrix A = new SquareMatrix(3);
             //Matrix B = new Matrix(3,3);
             //Matrix C= new Matrix (2,2);
             A.Input();
             //B.Input();
-            SquareMatrix B = A;
-            B.Input();
-            B = A + B;
+            A.Det();
             //Console.WriteLine("\n");
            /* C = A + B;
             C.Display();
             Console.WriteLine("\n");
             */
-            Console.Write(B);
             Console.Write("\n");
             Console.Write(A);
             
