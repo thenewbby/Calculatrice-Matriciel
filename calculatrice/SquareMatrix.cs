@@ -8,13 +8,20 @@ namespace calculatrice
 {
     class SquareMatrix : Matrix
     {
-
-        public SquareMatrix(int c) : base(c,c)
+        public SquareMatrix(int c) : base(c, c)
         {
 
-            this.Elements = new float[c, c];
+            this.Elements = new double[c, c];
             this.Lines = c;
             this.Columns = c;
+        }
+        public SquareMatrix(int c, string  nom) : base(c,c,nom)
+        {
+
+            this.Elements = new double[c, c];
+            this.Lines = c;
+            this.Columns = c;
+            this.name = nom; //pas besoin d'ajouté dans le dico car appele la base
         }
 
         public new SquareMatrix Trans()
@@ -181,12 +188,12 @@ namespace calculatrice
             }
         }*/
 
-        public int Det()
+        public Det()
         {
             int Max;
-            float k, det = 1;
+            double k, det = 1;
             SquareMatrix c = this;
-            float[,] Array = new float[this.Columns, 1];
+            double[,] Array = new double[this.Columns, 1];
 
             for (int j = 0; j < this.Columns; j++)
             {
@@ -229,7 +236,17 @@ namespace calculatrice
                 det *= c.Elements[x, x];
             }
             Console.WriteLine("\n" + det);
-                return 0;
+        }
+
+        public void Trace()
+        {
+            double Trac = 0;
+
+            for (int i = 0; i < this.Lines; i++)
+            {
+                Trac += this.Elements[i, i];
+            }
+            Console.WriteLine(Trac + "\n");
         }
     }            
 }

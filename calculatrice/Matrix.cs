@@ -10,13 +10,27 @@ namespace calculatrice
     {
         public int Lines { get; set; }
         public int Columns { get; set; }
-        public float[,] Elements { get; set; }
+        public double[,] Elements { get; set; }
+        public string name { get; set; }
 
         public Matrix(int c, int l)
         {
-            this.Elements = new float[c, l];
+            this.Elements = new double[c, l];
             this.Lines = l;
             this.Columns = c;
+        }
+
+        public Matrix(int c, int l, string nom)
+        {
+            this.Elements = new double[c, l];
+            this.Lines = l;
+            this.Columns = c;
+            this.name = nom;
+            if (!CalMat.listMatrix.ContainsKey(this.name))
+            {
+                CalMat.listMatrix.Add(this.name, this);
+            }
+            
         }
 
         public static Matrix operator +(Matrix a, Matrix b)
@@ -28,7 +42,7 @@ namespace calculatrice
                 {
                     for (int j = 0; j < a.Columns; j++)
                     {
-                        c.Elements[i, j] = a.Elements[i, j] + b.Elements[i, j];
+                        c.Elements[j, i] = a.Elements[j, i] + b.Elements[j, i];
                     }
                 }
                 return c;
@@ -50,7 +64,7 @@ namespace calculatrice
                 {
                     for (int j = 0; j < a.Columns; j++)
                     {
-                        c.Elements[i, j] = a.Elements[i, j] - b.Elements[i, j];
+                        c.Elements[j, i] = a.Elements[j, i] - b.Elements[j, i];
                     }
                 }
                 return c;
@@ -72,9 +86,9 @@ namespace calculatrice
                 {
                     for (int j = 0; j < b.Columns; j++)
                     {
-                        for (int z = 0; z < b.Columns; z++)
+                        for (int z = 0; z < a.Columns; z++)
                         {
-                            c.Elements[i, j] += a.Elements[i, z] * b.Elements[z, j];
+                            c.Elements[j, i] += a.Elements[z, i] * b.Elements[j, z];
                         }
                     }
                 }
@@ -87,7 +101,7 @@ namespace calculatrice
             }
         }
 
-        public static Matrix operator *(int a, Matrix b)
+        public static Matrix operator *(double a, Matrix b)
         {
             Matrix c = new Matrix(b.Lines, b.Columns);
             for (int i = 0; i < b.Lines; i++)
@@ -100,6 +114,27 @@ namespace calculatrice
             return c;
         }
 
+        public static Matrix operator *(string a, Matrix b)
+        {
+            double value;
+            if (Double.TryParse(a, out value))
+            {
+                return value * b;
+            }
+            Console.WriteLine("impossible de convertir '" + a + "' en double dans l'operateur * de matrix");
+            return null;
+        }
+
+        public static Matrix operator *(Matrix b, string a)
+        {
+            return a * b;
+        }
+
+        public static Matrix operator *(Matrix b, double a)
+        {
+            return a * b;
+        }
+
         public void Input()
         {
             bool num = false;
@@ -110,7 +145,7 @@ namespace calculatrice
                     while (!num)
                     {
                         Console.WriteLine("taper le coef ne la case " + i + ";" + j);
-                        if (float.TryParse(Console.ReadLine(), out Elements[i, j]))
+                        if (double.TryParse(Console.ReadLine(), out Elements[i, j]))
                         {
                             num = true;
                             Console.WriteLine("ok");
