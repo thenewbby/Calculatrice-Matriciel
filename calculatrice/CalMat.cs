@@ -11,18 +11,12 @@ namespace calculatrice
         public static Dictionary<String, Matrix> listMatrix = new Dictionary<String, Matrix>();
         static void Main(string[] args)
         {
+
             
-            Matrix A = new Matrix(3,3, "A");
-            Matrix B = new Matrix(2,3, "B");
-            A.Input();
-            Console.WriteLine(A);
-            B.Input();
-            Console.WriteLine(B);
             while (true)
             {
                 string control = Console.ReadLine();
                 UserInput.parse(control);
-
             }
             
 

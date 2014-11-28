@@ -12,16 +12,16 @@ namespace calculatrice
         {
 
             this.Elements = new double[c, c];
-            this.Lines = c;
-            this.Columns = c;
+            this.Lines    = c;
+            this.Columns  = c;
         }
         public SquareMatrix(int c, string  nom) : base(c,c,nom)
         {
 
             this.Elements = new double[c, c];
-            this.Lines = c;
-            this.Columns = c;
-            this.name = nom; //pas besoin d'ajouté dans le dico car appele la base
+            this.Lines    = c;
+            this.Columns  = c;
+            this.name     = nom; //pas besoin d'ajouté dans le dico car appele la base
         }
 
         public new SquareMatrix Trans()
@@ -40,11 +40,11 @@ namespace calculatrice
 
         public static SquareMatrix operator +(SquareMatrix a, SquareMatrix b)
         {
-            Matrix aM = (Matrix)a;
-            Matrix bM = (Matrix)b;
-            Matrix c = a + b;
+            Matrix aM      = (Matrix)a;
+            Matrix bM      = (Matrix)b;
+            Matrix c       = a + b;
             SquareMatrix r = new SquareMatrix(a.Lines);
-            r.Elements = c.Elements;
+            r.Elements    = c.Elements;
             return r;
         }
 
@@ -52,32 +52,32 @@ namespace calculatrice
 
         public static SquareMatrix operator -(SquareMatrix a, SquareMatrix b)
         {
-            Matrix aM = (Matrix)a;
-            Matrix bM = (Matrix)b;
-            Matrix c = a - b;
+            Matrix aM      = (Matrix)a;
+            Matrix bM      = (Matrix)b;
+            Matrix c       = a - b;
             SquareMatrix r = new SquareMatrix(a.Lines);
-            r.Elements = c.Elements;
+            r.Elements     = c.Elements;
             return r;
         }
 
 
         public static SquareMatrix operator *(SquareMatrix a, SquareMatrix b)
         {
-            Matrix aM = (Matrix)a;
-            Matrix bM = (Matrix)b;
-            Matrix c = a * b;
+            Matrix aM      = (Matrix)a;
+            Matrix bM      = (Matrix)b;
+            Matrix c       = a * b;
             SquareMatrix r = new SquareMatrix(a.Lines);
-            r.Elements = c.Elements;
+            r.Elements     = c.Elements;
             return r;
         }
 
 
         public static SquareMatrix operator *(int a, SquareMatrix b)
         {
-            Matrix bM = (Matrix)b;
-            Matrix c = a * b;
+            Matrix bM      = (Matrix)b;
+            Matrix c       = a * b;
             SquareMatrix r = new SquareMatrix(b.Lines);
-            r.Elements = c.Elements;
+            r.Elements     = c.Elements;
             return r;
         }
 
@@ -188,7 +188,7 @@ namespace calculatrice
             }
         }*/
 
-        public Det()
+        public void Det()
         {
             int Max;
             double k, det = 1;
@@ -229,7 +229,6 @@ namespace calculatrice
                 }
 
             }
-            Console.Write(c);
 
             for (int x = 0; x < c.Lines; x++ )
             {
@@ -248,6 +247,30 @@ namespace calculatrice
             }
             Console.WriteLine(Trac + "\n");
         }
+        
+        public void Norme()
+        {
+
+            double sum = 0;
+            double max = 0;
+
+            SquareMatrix N = this;
+
+            for (int j = 0 ; j < this.Columns; j++)
+            {
+                sum = 0;
+                for (int i = 0 ; i < this .Lines; i++)
+                {
+                    sum += Math.Abs( N.Elements[j,i]); // norme 1
+                }
+                if ( max < sum)
+                {
+                    max = sum;
+                }
+            }
+            Console.WriteLine(max);
+        }
+
     }            
 }
 

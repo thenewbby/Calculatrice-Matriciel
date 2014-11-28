@@ -8,24 +8,24 @@ namespace calculatrice
 {
     class Matrix
     {
-        public int Lines { get; set; }
-        public int Columns { get; set; }
+        public int Lines          { get; set; }
+        public int Columns        { get; set; }
         public double[,] Elements { get; set; }
-        public string name { get; set; }
+        public string name        { get; set; }
 
         public Matrix(int c, int l)
         {
             this.Elements = new double[c, l];
-            this.Lines = l;
-            this.Columns = c;
+            this.Lines    = l;
+            this.Columns  = c;
         }
 
         public Matrix(int c, int l, string nom)
         {
             this.Elements = new double[c, l];
-            this.Lines = l;
-            this.Columns = c;
-            this.name = nom;
+            this.Lines    = l;
+            this.Columns  = c;
+            this.name     = nom;
             if (!CalMat.listMatrix.ContainsKey(this.name))
             {
                 CalMat.listMatrix.Add(this.name, this);
@@ -76,7 +76,6 @@ namespace calculatrice
             }
         }
 
-
         public static Matrix operator *(Matrix a, Matrix b)
         {
             if (a.Columns == b.Lines)
@@ -123,16 +122,6 @@ namespace calculatrice
             }
             Console.WriteLine("impossible de convertir '" + a + "' en double dans l'operateur * de matrix");
             return null;
-        }
-
-        public static Matrix operator *(Matrix b, string a)
-        {
-            return a * b;
-        }
-
-        public static Matrix operator *(Matrix b, double a)
-        {
-            return a * b;
         }
 
         public void Input()
