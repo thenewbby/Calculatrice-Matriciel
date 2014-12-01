@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace calculatrice
+namespace CalMat
 {
     class CalMat
     {
         public static Dictionary<String, Matrix> listMatrix = new Dictionary<String, Matrix>();
         static void Main(string[] args)
         {
-
-            
             while (true)
             {
                 string control = Console.ReadLine();

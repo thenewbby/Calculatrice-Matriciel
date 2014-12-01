@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace calculatrice
+namespace CalMat
 {
      class UserInput    
          
@@ -16,6 +16,7 @@ namespace calculatrice
          private static Regex exit_rgx    = new Regex(@"(exit)");
          private static Regex meth_rgx    = new Regex(@"^(\w+)\((\w)\)$");
          private static Regex methaff_rgx = new Regex(@"^(\w)\=(\w+)\((\w)\)$");
+         private static Regex affMat_rgx  = new Regex(@"^(\w)$");
 
          private static void create( string operande1, string operande2, string Mtrx_assign_name)
          {
@@ -225,6 +226,17 @@ namespace calculatrice
                      }
                      CalMat.listMatrix[Mtrx_assign_name] = CalMat.listMatrix[matrix].Trans();
                      Console.WriteLine(CalMat.listMatrix[Mtrx_assign_name]);
+                 }
+             }
+
+             matches = affMat_rgx.Matches(control);
+
+             if (matches.Count > 0)
+             {
+                 String matrix = matches[0].Groups[1].ToString();
+                 if (CalMat.listMatrix.ContainsKey(matrix))
+                 {
+                     Console.WriteLine(CalMat.listMatrix[matrix]);
                  }
              }
          }
